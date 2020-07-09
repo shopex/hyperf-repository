@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace Shopex\Hyperf;
 
 use Hyperf\Database\Model\Builder;
+use Shopex\Hyperf\Interfaces\RepositoryInterface;
 
-class Repository extends Builder
+class Repository extends Builder implements RepositoryInterface
 {
     use Traits\RepositoryFactory;
     use Traits\RepositoryTools;
