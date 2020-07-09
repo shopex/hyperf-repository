@@ -14,8 +14,8 @@ namespace Shopex\Hyperf;
 
 use Hyperf\Database\Model\Builder;
 
-class Respository extends Builder
+class Repository extends Builder
 {
-    use RespositoryFactory;
-    use RespositoryTools;
+    use Traits\RepositoryFactory;
+    use Traits\RepositoryTools;
 }

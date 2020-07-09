@@ -10,15 +10,16 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
-namespace Shopex\Hyperf\Trait;
+namespace Shopex\Hyperf\Traits;
 
-trait RespositoryFactory
+trait RepositoryFactory
 {
     protected static $entity;
 
     public static function instance()
     {
-        $entity = new self::$entity();
+        $className = static::$entity;
+        $entity = new $className();
         $entity->setRepositoryClassName(static::class);
         return $entity->getRepository();
     }
