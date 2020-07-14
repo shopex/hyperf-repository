@@ -92,6 +92,39 @@ trait RepositoryTools
             return $instance ? $instance->toArray() : [];
         }
     }
+    
+    /**
+     * 更新数据表字段数据
+     *
+     * @param $filter 筛选条件
+     * @param $data   更新数据
+     *
+     * @return array
+     */
+    public function updateOneBy($filter, $data)
+    {
+        $instance = $this->getModel();
+        if (is_array($filter) && !empty($filter)) {
+            foreach ($filter as $k => $v) {
+                if (is_array($v)) {
+                    if (strtolower($v[0]) == 'in') {
+                        $instance = $instance->whereIn($k, explode(',', $v[1]));
+                    } else {
+                        $instance = $instance->where($k, $v[0], $v[1]);
+                    }
+                } else {
+                    $instance = $instance->where($k, $v);
+                }
+            }
+        }
+        
+        $query = $instance->first();
+        foreach ($data as $k => $v) {
+            $query->$k = $v;
+        }
+        $query->save();
+        return $query ? $query->toArray() : [];
+    }
 
     /**
      * 根据条件获取一条结果
@@ -211,6 +244,36 @@ trait RepositoryTools
         $instance = $this->getModel();
 
         return $instance->where($where)->delete();
+    }
+    
+    /**
+     * 根据条件获取记录条数
+     *
+     * @param array $filter 查询条件
+     *
+     * @return integer
+     */
+    public function newcount($filter)
+    {
+        $instance = $this->getModel();
+    
+        if (is_array($filter) && !empty($filter)) {
+            foreach ($filter as $k => $v) {
+                if (is_array($v)) {
+                    if (strtolower($v[0]) == 'in') {
+                        $instance = $instance->whereIn($k, explode(',', $v[1]));
+                    } else {
+                        $instance = $instance->where($k, $v[0], $v[1]);
+                    }
+                } else {
+                    $instance = $instance->where($k, $v);
+                }
+            }
+        }
+        
+        $count = $instance->count();
+        
+        return $count;
     }
 
 }
